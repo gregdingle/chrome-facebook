@@ -249,6 +249,7 @@ function checkForSuccessPage() {
   }
 }
 
+// TODO: this is MAIN
 $(document).ready(function() {
   // Do things here that must be done when the extension is
   // installed/opened
@@ -259,6 +260,7 @@ $(document).ready(function() {
   }
 
   setupLoginLogoutHandlers();
+  checkNotificationsAndInbox();  
 });
 
 function setupLoginLogoutHandlers() {
@@ -274,33 +276,50 @@ function setupLoginLogoutHandlers() {
   onLogin(function() {
     showActiveIcon();
   });
-
-  checkNotificationsAndInbox();
 }
 
-function checkNotificationsAndInbox() {
+function checkNotificationsAndInbox(do_check_inbox) {
+  // checking inbox currently does not provide a way to distinguish between
+  // titan "other" messages and messages from friends. 
+  // TODO: query unified_threads
+  // http://developers.facebook.com/docs/reference/fql/unified_thread/
+  do_check_inbox = do_check_inbox || false;
+  
+  function updateCount(notifications, threads) {
+    var count = 0;
+    for(var i = 0; i < notifications.length; i++) {
+      if(notifications[i].is_unread) {
+        count++;
+      }
+    }
+    for(var i = 0; i < threads.length; i++) {
+      if(threads[i].unread > 0) {
+        count++;
+      }
+    }
+    
+    if(count != 0) {
+      return chrome.browserAction.setBadgeText({text: count + ""});
+    } else {
+      return chrome.browserAction.setBadgeText({text: ""});
+    }    
+    // TODO: flash color when counter number changes because it is too hard to
+    // notice otherwise
+    // chrome.browserAction.setBadgeBackgroundColor({color: [255, 255, 0, 255]})
+  }
+  
   if(isLoggedIn()) {
     getNotifications(true, false, function(notifications, apps) {
-      console.log('updating notifications');
-      getInbox(true, false, function(threads, people) {
-        console.log('updating inbox');
-        var count = 0;
-        for(var i = 0; i < notifications.length; i++) {
-          if(notifications[i].is_unread) {
-            count++;
-          }
-        }
-        for(var i = 0; i < threads.length; i++) {
-          if(threads[i].unread > 0) {
-            count++;
-          }
-        }
-        if(count != 0) {
-          chrome.browserAction.setBadgeText({text: count + ""});
-        } else {
-          chrome.browserAction.setBadgeText({text: ""});
-        }
-      });
+      console.log('updating notifications');      
+      
+      if (do_check_inbox) {
+        getInbox(true, false, function(threads, people) {
+          console.log('updating inbox');
+          updateCount(notifications, threads);
+        });
+      } else {
+        updateCount(notifications, []);
+      }          
     });
   }
 
