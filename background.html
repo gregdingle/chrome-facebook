@@ -4,18 +4,12 @@
     <script src="js/jquery.js"></script>
     <script src="js/underscore.js"></script>
     <script src="js/ui.js"></script>
-    <script id="backjs" src="js/background.js"></script>
+    <script src="js/background.js"></script>
 </head>
 <body>
   <div id="fb-root"></div>
   <script src="js/core.debug.js"></script>
-  <!-- // <script src="js/fb.core.debug.js"></script> -->
   <script>
-    // TODO: better way to bust cache?
-    // var backjs = document.getElementById('backjs');
-    // var src = "js/background.js";
-    // backjs.src = src + '?rand=' + Math.floor(Math.random() * 1000 * 1000);
-
     FB.init({apiKey: apiKey});
   </script>
 </body>

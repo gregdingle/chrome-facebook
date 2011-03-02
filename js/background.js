@@ -249,7 +249,6 @@ function checkForSuccessPage() {
   }
 }
 
-// TODO: this is MAIN
 $(document).ready(function() {
   // Do things here that must be done when the extension is
   // installed/opened

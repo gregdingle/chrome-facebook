@@ -1,14 +1,12 @@
 {
   "extName": {
-    "message": "Gregbook for Google Chrome",
+    "message": "Facebook for Google Chrome",
     "description": "Extension name."
   },
   "extDesc": {
-    "message": "Extension which ingratiates you to Greg Dingle.",
+    "message": "Extension which lets you read your Facebook news feed and wall. You can also post status updates.",
     "description": "Description of extension."
   },
-  
-  
   "statusFiller": {
     "message": "What's on your mind?",
     "description": "Text inviting a user to post a status."
